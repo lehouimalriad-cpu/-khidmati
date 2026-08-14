@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: khidmati
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5432:5432"]
+    volumes: [khidmati_pg:/var/lib/postgresql/data]
+  api:
+    build: ./server
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/khidmati
+      JWT_SECRET: CHANGE_ME_LONG_RANDOM_SECRET
+      CORS_ORIGIN: "*"
+    ports: ["4000:4000"]
+    depends_on: [db]
+volumes:
+  khidmati_pg:
